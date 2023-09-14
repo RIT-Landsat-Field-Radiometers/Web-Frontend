@@ -16,6 +16,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { months } from '../../components/datetimeDetails'
+import { start } from "repl";
 
 ChartJS.register(
   CategoryScale,
@@ -153,7 +154,7 @@ export default function Data(props) {
                         }}
                       >
                         {months.map((month) => (
-                          <SelectItem key={month.short} value={month.short}>
+                          <SelectItem key={month.number} value={month.number}>
                             {month.name}
                           </SelectItem>
                         ))}
@@ -208,7 +209,7 @@ export default function Data(props) {
                         }}
                       >
                         {months.map((month) => (
-                          <SelectItem key={month.short} value={month.short}>
+                          <SelectItem key={month.number} value={month.number}>
                             {month.name}
                           </SelectItem>
                         ))}
@@ -340,6 +341,7 @@ export async function getStaticProps(context) {
   }
 }
 
+
 const handleExportData = async (startDate, endDate, radiometerID, onClose) => {
   console.log("Start")
   console.log(startDate.month);
@@ -350,10 +352,24 @@ const handleExportData = async (startDate, endDate, radiometerID, onClose) => {
   console.log(endDate.day);
   console.log(endDate.year);
 
+  console.log(startDate)
+  console.log(endDate)
+
 
   // request data with the selected start and end dates
-  // const response = await fetch('http://52.204.169.92:3000/getRadiometerData/?startDate=${startDate.month}&endDate=${endDate.month}');
-  // const data = await response.json();
+  // const url = ("http://52.204.169.92:3000/getRadiometerData/" + radiometerID +
+  //   new URLSearchParams({ startMonth: startDate.month, startDay: startDate.day, startYear: startDate.year,
+  //                         endMonth: endDate.month, endDay: endDate.day, endYear: endDate.year }).toString() );
+    const url = "http://52.204.169.92:3000/getRadiometerData/" + radiometerID + 
+                "?startMonth=" + startDate.month +
+                "&startDay=" + startDate.day +
+                "&startYear=" + startDate.year +
+                "&endMonth=" + endDate.month +
+                "&endDay=" + endDate.day +
+                "&endYear=" + endDate.year ;
+  // const response = await fetch("http://52.204.169.92:3000/getRadiometerData/" + radiometerID + "?startDate=${startDate.month}&endDate=${endDate.month}");
+  const response = await fetch(url);
+  const data = await response.json();
 
   // process the retrieved data or trigger the export process
   // 
